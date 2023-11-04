@@ -2,7 +2,7 @@
 import bz2
 import os, re
 
-file_name = "kowiki-20231020-pages-articles-multistream1.xml-p1p82407.bz2"
+file_name = "kowiki-20231020-pages-articles-multistream.xml.bz2"
 # # bz2 파일 읽기
 # with open(os.path.join(os.getcwd(), 'data', file_name), "rb") as f:
 #     data = f.read()
@@ -29,11 +29,17 @@ def list_wiki(dirname):
                 filepaths.append(filepath)
     return sorted(filepaths)
 
-filepaths = list_wiki('data/text')
-print(len(filepaths))
+def load_data(file_name, total_worker) :
+    filepaths = list_wiki('data/text')
+    total_files = len(filepaths)
+    total_worker = 8
+    files_per_worker = total_files // total_worker
 
-with open(os.path.join(os.getcwd(), 'parsed_data', file_name + '.txt'), "w") as outfile:
-    for filename in filepaths:
-        with open(filename) as infile:
-            contents = infile.read()
-            outfile.write(contents)
+    count = 0
+    for i in range(total_worker) :
+        outfile = open(os.path.join(os.getcwd(), 'parsed_data', file_name + '_' + str(i) + '.txt'), "w")
+        for j in range(files_per_worker) :
+            with open(filepaths[count]) as infile:
+                contents = infile.read()
+                outfile.write(contents)
+                count += 1

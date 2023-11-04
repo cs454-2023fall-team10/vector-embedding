@@ -1,5 +1,6 @@
 from gensim.models import Word2Vec
 from konlpy.tag import Okt
+import load_data, preprocess, make_model
 
 # https://jeongminhee99.tistory.com/72
 def parse_sentence (sentence) :
@@ -18,12 +19,20 @@ def parse_sentence (sentence) :
     
     return results
 
-model = Word2Vec.load("./models/model")
+def test() :
+    model = Word2Vec.load("./models/model")
 
-# 문장의 유사성
-s1 = '제주도는 아름다운 섬 입니다'
-s2 = '독도는 아름다운 섬 입니다' #corrected variable name
+    # 문장의 유사성
+    s1 = '현재 채널팀이 내 전공 관련 포지션을 채용중인지 물어보고 싶어'
+    s2 = '채용중인 포지션'
+    s3 = '채널팀 알아보기'
 
-distance1 = model.wv.n_similarity(parse_sentence(s1).split(), parse_sentence(s2).split())
+    distance1 = model.wv.n_similarity(parse_sentence(s1).split(), parse_sentence(s2).split())
+    distance2 = model.wv.n_similarity(parse_sentence(s1).split(), parse_sentence(s3).split())
 
-print(distance1)
+    print(distance1)
+    print(distance2)
+
+
+if __name__ == '__main__' :
+    test()

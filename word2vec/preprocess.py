@@ -40,7 +40,7 @@ def worker(data):
                 # print('run start=',i)
                 # 진행률을 출력하기 위한 부분
                 i += 1
-                if i % 1000 == 0:
+                if i % 10000 == 0:
                     print('[{}] {} finished'.format(file_name, i))
 
                 # 특수 문자 제거 후 품사 분석 진행, 파일에 기록
@@ -59,8 +59,8 @@ def worker(data):
                 # print('run end=',i)
 
 
-if __name__ == '__main__':
-    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+def preprocess(filename, total_worker) :
+    pool = multiprocessing.Pool(processes=total_worker)
     print('loading multiprocessing pool...')
 
     data = []
@@ -68,8 +68,14 @@ if __name__ == '__main__':
         print(path, dirs, files)
         for file_name in files:
             data.append( (path, file_name) )
-        worker(data[-1])
     pool.map(worker, data)
     pool.close()
     pool.join()
+
+    with open(os.path.join(os.getcwd(), 'preprocess', filename + '.txt'), "w") as outfile :
+        for path, dirs, files in os.walk(os.path.join(os.getcwd(), 'preprocess')) :
+            for file in files :
+                with open(os.path.join(path, file)) as infile :
+                    contents = infile.read()
+                    outfile.write(contents)
     print('End!')

@@ -3,3 +3,4 @@ word2vec/models/*
 word2vec/parsed_data/*
 word2vec/preprocess/*
 *.sh
+openai/api_key
