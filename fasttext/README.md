@@ -1,47 +1,13 @@
-# Used dataset
-This model is based on wikipedia dump file. If you want to make model with our code, please follow this process.
+## 0. Prerequisite
+```
+$ conda env create --file environment.yml
+```
 
-> ## 0. Prerequisite
-> To make model, you should install java in your local environment.
-> ```
-> sudo apt-get update && sudo apt-get install -y openjdk-8-jdk g++ build-essential autoconf automake
-> ```
-> Also, you can use conda for executing word2vec
-> ```
-> conda env create --file ./environment.yml
-> conda activate word2vec
-> ```
-> For making model, you should have some directories
-> ```
-> mkdir data
-> mkdir models
-> mkdir parsed_data
-> mkdir preprocess
-> ```
-   
-> ## 1. Download dump file & locate in ./data directory
-> You can download files in https://dumps.wikimedia.org/kowiki/
-   
-> ## 2. Parse dumpfile with wikiextractor
-> ```
-> pip install wikiextractor
-> cd data
-> python -m wikiextractor.WikiExtractor <your_dump_file>
-> ```
-   
-> ## 3. Run python file sequently
-> ```
-> python load_data.py
-> python preprocess.py
-> python make_model.py
-> ```
-> Model will be located in ./models
-
-> ## 4. Run model
-> ```
-> python main.py
-> ```
-
+## 1. Run
+For <json_file_path> and <intents_file_path>, relative path should be used
+```
+$ python main.py <json_file_path> <intents_file_path> <NUM_OUTPUTS> <DEPTH_THRESHOLDS> <(Optional) model_name>
+```
 
 # Gensim warning
 If you use gensim 4.x.x, error will happen. Please install gensim==3.8.3
