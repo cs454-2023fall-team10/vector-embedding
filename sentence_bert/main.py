@@ -18,7 +18,7 @@ def get_best_sentence(intent, choices, model) :
 if __name__ == "__main__" :
   model = SentenceTransformer('jhgan/ko-sroberta-multitask')
   intent = "채널팀에 대해 알아보고 싶어"
-  file_name = "jobs-homepage.json"
+  file_name = "lead-homepage.json"
 
   dic = utils.load_and_parse(file_name)
   section = dic["sections"][0]

@@ -1,7 +1,7 @@
-word2vec/data/*
-word2vec/models/*
-word2vec/parsed_data/*
-word2vec/preprocess/*
+fasttext/data/*
+fasttext/models/*
+fasttext/parsed_data/*
+fasttext/preprocess/*
 *.sh
 openai/api_key
 */__pycache__
