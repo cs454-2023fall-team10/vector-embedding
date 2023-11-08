@@ -4,3 +4,6 @@
 [submodule "chatbot-dataset"]
 	path = chatbot-dataset
 	url = https://github.com/cs454-2023fall-team10/chatbot-dataset.git
+[submodule "embedding-metrics"]
+	path = embedding-metrics
+	url = https://github.com/cs454-2023fall-team10/embedding-metrics.git
