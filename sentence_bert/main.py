@@ -1,19 +1,36 @@
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
+import utils
 
-corpus = ["배포 시스템 관련 문의", "DevOps 요청 사항 작성", "VPN 요청 사항", "DevOps팀 연결"]
+def get_best_sentence(intent, choices, model) :
+  choice_embeddings = model.encode(choices)
 
-model = SentenceTransformer('./result.pt')
+  top_k = 1
+  intent_embedding = model.encode(intent)
+  cos_scores = util.pytorch_cos_sim(intent_embedding, choice_embeddings)[0]
+  cos_scores = cos_scores.cpu()
+  top_result = np.argpartition(-cos_scores, range(top_k))[0:top_k]
 
-corpus_embeddings = model.encode(corpus)
+  print(choices[top_result].strip(), "(Score: %.4f)" % (cos_scores[top_result]))
+  return top_result
+  
 
-query = "제품의 실시간 서비스 중단 문제로 어려움을 겪고 있으며, 빠른 대응이 필요합니다"
+if __name__ == "__main__" :
+  model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+  intent = "채널팀에 대해 알아보고 싶어"
+  file_name = "jobs-homepage.json"
 
-top_k = len(corpus)
-query_embedding = model.encode(query)
-cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
-cos_scores = cos_scores.cpu()
-top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
+  dic = utils.load_and_parse(file_name)
+  section = dic["sections"][0]
+  while True :
+    (raw_choices, choices) = utils.get_choices(section)
+    if len(choices) != 0 :
+      top_result_idx = get_best_sentence(intent, choices, model)
+      section_id = raw_choices[top_result_idx]["nextSectionId"]
+      section = utils.get_sections(section_id, dic)
+      continue
 
-for idx in top_results:
-  print(corpus[idx].strip(), "(Score: %.4f)" % (cos_scores[idx]))
+    else : # Reach last destination
+      print("reached at the bottom")
+      break
+
